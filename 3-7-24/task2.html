@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spacecraft Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="mb-4">Search for a Spacecraft</h2>
+
+    <form id="searchForm">
+        <div class="form-group">
+            <label for="spacecraftName">Enter Spacecraft Name:</label>
+            <input type="text" class="form-control" id="spacecraftName" name="spacecraftName" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <h3 class="mt-4" id="result"></h3>
+</div>
+
+<script>
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting in the traditional way
+
+        const spacecraftName = document.getElementById('spacecraftName').value.toLowerCase(); // Get the spacecraft name
+
+        // Fetch data from the API
+        fetch('https://isro.vercel.app/api/spacecrafts')
+            .then(response => response.json())
+            .then(data => {
+                const spacecrafts = data.spacecrafts;
+                let found = false;
+
+                // Check if the entered spacecraft name exists in the data
+                spacecrafts.forEach(spacecraft => {
+                    if (spacecraft.name.toLowerCase() === spacecraftName) {
+                        found = true;
+                    }
+                });
+
+                // Display the result
+                const resultElement = document.getElementById('result');
+                if (found) {
+                    resultElement.textContent = 'Spacecraft found!';
+                    resultElement.classList.add('text-success');
+                    resultElement.classList.remove('text-danger');
+                } else {
+                    resultElement.textContent = 'Spacecraft not found!';
+                    resultElement.classList.add('text-danger');
+                    resultElement.classList.remove('text-success');
+                }
+            })
+            .catch(error => console.error('Error fetching the data:', error)); // Log any errors
+    });
+</script>
+
+</body>
+</html>

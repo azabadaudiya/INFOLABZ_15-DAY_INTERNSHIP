@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mutual Fund Scheme Lookup</title>
+</head>
+<body>
+
+<h2>Mutual Fund Scheme Lookup</h2>
+
+<form id="schemeForm">
+    <label for="schemeCode">Enter Scheme Code:</label>
+    <input type="text" id="schemeCode" name="schemeCode" required>
+    <input type="submit" value="Submit">
+</form>
+
+<h2>Scheme Information</h2>
+<p id="schemeInfo"></p>
+
+<script>
+    document.getElementById('schemeForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting in the traditional way
+
+        const schemeCode = document.getElementById('schemeCode').value; // Get the scheme code
+
+        // Fetch data from the API
+        fetch('https://api.mfapi.in/mf')
+            .then(response => response.json()) // Convert the response to JSON
+            .then(data => {
+                // Find the scheme with the matching code
+                const scheme = data.find(item => item.schemeCode == schemeCode);
+
+                // Display scheme name or "Scheme not found"
+                const schemeInfo = document.getElementById('schemeInfo');
+                if (scheme) {
+                    schemeInfo.textContent = `Scheme Name: ${scheme.schemeName}`;
+                } else {
+                    schemeInfo.textContent = 'Scheme not found';
+                }
+            })
+            .catch(error => console.error('Error fetching the data:', error)); // Log any errors
+    });
+</script>
+
+</body>
+</html>

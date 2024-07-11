@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News Table</title>
+  <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous"
+  >
+</head>
+<body>
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Sports News</h1>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th>SrNo</th>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="news-table-body">
+        <!-- News items will be inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch('https://inshortsapi.vercel.app/news?category=sports')
+        .then(response => response.json())
+        .then(data => {
+          const newsTableBody = document.getElementById('news-table-body');
+          data.data.forEach((newsItem, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${index + 1}</td>
+              <td>${newsItem.title}</td>
+              <td>${newsItem.author}</td>
+              <td>${newsItem.date}, ${newsItem.time}</td>
+            `;
+            newsTableBody.appendChild(row);
+          });
+        })
+        .catch(error => console.error('Error fetching the news data:', error));
+    });
+  </script>
+
+  <script
+    src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+    integrity="sha384-3p22Ujv1iYLKKJ5dJa6Im7XAN60Nlc6pG+eojaRIa7sXoNS+RHNeE1oYbsXfKu75"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"
+  ></script>
+</body>
+</html>

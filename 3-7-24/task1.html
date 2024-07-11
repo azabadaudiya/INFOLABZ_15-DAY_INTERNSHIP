@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Universities in India</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <style>
+      table {
+        width: 100%;
+        margin: 20px 0;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="mt-4">Universities in India</h2>
+
+      <table class="table table-striped" id="universityTable">
+        <thead>
+          <tr>
+            <th>SR NO</th>
+            <th>UNIVERSITY NAME</th>
+            <th>STATE-PROVINCE</th>
+            <th>WEBSITE LINK</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <script>
+      // Fetch data from the API
+      fetch("http://universities.hipolabs.com/search?country=india")
+        .then((response) => response.json())
+        .then((data) => {
+          const tableBody = document
+            .getElementById("universityTable")
+            .getElementsByTagName("tbody")[0];
+
+          // Loop through the data and create rows for the table
+          data.forEach((university, index) => {
+            const row = tableBody.insertRow();
+
+            const cellSrNo = row.insertCell(0);
+            const cellName = row.insertCell(1);
+            const cellState = row.insertCell(2);
+            const cellWebsite = row.insertCell(3);
+
+            cellSrNo.textContent = index + 1;
+            cellName.textContent = university.name;
+            cellState.textContent = university["state-province"] || "N/A";
+            cellWebsite.innerHTML = `<a href="${university.web_pages[0]}" target="_blank">Visit Site</a>`;
+          });
+        })
+        .catch((error) => console.error("Error fetching the data:", error));
+    </script>
+  </body>
+</html>

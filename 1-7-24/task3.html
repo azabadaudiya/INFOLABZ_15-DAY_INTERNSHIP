@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>COVID-19 India Data</title>
+</head>
+<body>
+
+<h2>COVID-19 India Data</h2>
+
+<table border="1" id="covidTable">
+    <thead>
+        <tr>
+            <th>SR NO</th>
+            <th>STATE NAME</th>
+            <th>CONFIRMED CASES</th>
+            <th>RECOVERED CASES</th>
+            <th>DEATH CASES</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script>
+    // Fetch data from the API
+    fetch('https://data.covid19india.org/data.json')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('covidTable').getElementsByTagName('tbody')[0];
+            const stateData = data.statewise;
+
+            // Loop through the state data
+            stateData.forEach((state, index) => {
+                if (index > 0) { // Skipping the first item as it contains total data for India
+                    const row = tableBody.insertRow();
+                    const cellSrNo = row.insertCell(0);
+                    const cellStateName = row.insertCell(1);
+                    const cellConfirmedCases = row.insertCell(2);
+                    const cellRecoveredCases = row.insertCell(3);
+                    const cellDeathCases = row.insertCell(4);
+
+                    cellSrNo.innerHTML = index;
+                    cellStateName.innerHTML = state.state;
+                    cellConfirmedCases.innerHTML = state.confirmed;
+                    cellRecoveredCases.innerHTML = state.recovered;
+                    cellDeathCases.innerHTML = state.deaths;
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching the data:', error));
+</script>
+
+</body>
+</html>
